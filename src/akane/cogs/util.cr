@@ -30,11 +30,11 @@ module Akane
       info = REDIS.info
 
       String.build do |s|
-        s << "Akane is a cute bot (totally not a NSA agent) that spy on guilds,
-              showing a myriad of stats about guilds and users. In addition, there's
-              a lot of commands related to programming, science, anime and novel.\n"
-        s << "\n"
-        s << "**[Web interface](https://madokami.pw/)**\n"
+        s << "Akane is a cute bot (totally not a NSA agent) that spy on guilds, showing
+              a myriad of stats about guilds and users. In addition, there's a lot of
+              commands related to programming, science, anime and novel.".strip
+        s << "\n\n"
+        s << "**[Web interface](https://madokami.pw/)** (WIP)\n"
         s << "**[Let me join your guild!](" << ENV["INVITE_URL"] << ")**\n"
         s << "**[Github](https://github.com/kandayo/akane)**\n"
         s << "\n"
