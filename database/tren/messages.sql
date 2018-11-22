@@ -9,7 +9,7 @@ insert into messages (id, guild_id, channel_id, user_id, tts, mention_everyone, 
        {{msg.tts}},
        {{msg.mention_everyone}},
        {{msg.embeds.to_json}},
-       {{msg.content}},
+       {{msg.content || ""}},
        {{msg.timestamp}}
      );
 
