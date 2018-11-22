@@ -8,9 +8,7 @@ module Akane
       usage: "(name)"
     )]
     def man(client, payload, args)
-      return
-
-      res = DB.query_one?(DB.find_man(args.first), as: {String, String})
+      res = DB.query_one?(DB.find_man, args.first, as: {String, String})
       return unless res
 
       description, url = res

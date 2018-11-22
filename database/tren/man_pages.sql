@@ -7,9 +7,9 @@ insert into man_pages (name, description, url)
        {{url}}
     );
 
--- name: find_man(name)
+-- name: find_man
 
 select description, url
   from man_pages
- where name = {{name}}
+ where name = $1
  limit 1;
