@@ -16,7 +16,7 @@ insert into messages (id, guild_id, channel_id, user_id, tts, mention_everyone, 
 -- name: update_msg(msg : Discord::Gateway::MessageUpdatePayload)
 
 update messages
-   set content = {{msg.content}}, edited = true
+   set content = {{msg.content || ""}}, edited = true
  where id = {{msg.id}};
 
 -- name: delete_msg(id : Discord::Snowflake)

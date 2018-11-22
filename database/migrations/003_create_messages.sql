@@ -7,7 +7,7 @@ create table messages (
   tts bool not null,
   mention_everyone bool not null,
   embeds json,
-  content text,
+  content text default '' not null,
   keypresses integer default 0 not null,
   edited boolean default false not null,
   "timestamp" timestamptz not null
