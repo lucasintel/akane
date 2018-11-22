@@ -72,7 +72,7 @@ module Akane
       description: "Show stats about the bot"
     )]
     def info(client, payload, args)
-      cache = client.cache.as(Akane::Cache)
+      cache = client.cache.as(Discord::Cache)
 
       embed = Discord::Embed.new(
         thumbnail: Discord::EmbedThumbnail.new(url: cache.resolve_current_user.avatar_url),
