@@ -1,0 +1,2 @@
+*.sql linguist-detectable=true
+Dockerfile linguist-detectable=false

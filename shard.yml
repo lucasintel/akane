@@ -1,0 +1,46 @@
+name: akane
+version: 0.1.0
+
+authors:
+  - kandayo <kandayo@riseup.net>
+
+crystal: 0.27.0
+
+dependencies:
+  discordcr:
+    github: kandayo/discordcr
+    branch: master
+  discordcr-middleware:
+    github: z64/discordcr-middleware
+    branch: master
+  discordcr-plugin:
+    github: z64/discordcr-plugin
+    branch: master
+  hardware:
+    github: crystal-community/hardware
+  humanize_time:
+    github: mamantoha/humanize_time
+  migrate:
+    github: kandayo/migrate.cr
+    branch: master
+  pg:
+    github: will/crystal-pg
+  redis:
+    github: stefanwille/crystal-redis
+    version: ~> 2.1.1
+  tren:
+    github: kandayo/tren
+    branch: master
+
+development_dependencies:
+  ameba:
+    github: veelenga/ameba
+    version: 0.8.1
+
+targets:
+  micrate:
+    main: database/migrate.cr
+  akane:
+    main: src/akane.cr
+
+license: MIT

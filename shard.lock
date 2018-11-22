@@ -1,0 +1,62 @@
+version: 1.0
+shards:
+  ameba:
+    github: veelenga/ameba
+    version: 0.8.1
+
+  db:
+    github: crystal-lang/crystal-db
+    version: 0.5.1
+
+  discordcr:
+    github: kandayo/discordcr
+    commit: 60019541729655e5533ed22eb59e8c709b4f70c5
+
+  discordcr-middleware:
+    github: z64/discordcr-middleware
+    commit: 562d68698114473465793112fee98ce12fa2a5ca
+
+  discordcr-plugin:
+    github: z64/discordcr-plugin
+    commit: a34dacfd56f5b1dd1d54e64ec4d787bed5f57dd3
+
+  hardware:
+    github: crystal-community/hardware
+    version: 0.4.0
+
+  humanize_time:
+    github: mamantoha/humanize_time
+    version: 0.3.0
+
+  i18n:
+    github: TechMagister/i18n.cr
+    commit: d8a8933f6a4eb7d9790c3803cb8bec06c304ea5c
+
+  migrate:
+    github: kandayo/migrate.cr
+    commit: 014cdde0af71112a7e5125b090e1990a0f3c20d3
+
+  pg:
+    github: will/crystal-pg
+    version: 0.15.0
+
+  pool:
+    github: ysbaddaden/pool
+    version: 0.2.3
+
+  rate_limiter:
+    github: z64/rate_limiter
+    commit: b9992a7c474f9f863aa34ac677244d6b520cba97
+
+  redis:
+    github: stefanwille/crystal-redis
+    version: 2.1.1
+
+  time_format:
+    github: vladfaust/time_format.cr
+    version: 0.1.1
+
+  tren:
+    github: kandayo/tren
+    commit: 419ab2c297cdfa43d6b980a141f3c115cecd9e1e
+
