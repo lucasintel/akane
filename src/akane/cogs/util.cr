@@ -27,23 +27,18 @@ module Akane
 
     private def description(cache)
       pid = Hardware::PID.new
-      info = REDIS.info
 
       String.build do |s|
-        s << "Akane is a cute bot (totally not a NSA agent) that spy on guilds, showing
-              a myriad of stats about guilds and users. In addition, there's a lot of
-              commands related to programming, science, anime and novel.".strip
-        s << "\n\n"
-        s << "**[Web interface](https://madokami.pw/)** (WIP)\n"
+        s << "Akane is a cute bot (totally not a NSA agent) that spy on guilds, showing \
+              a myriad of stats about guilds and users. In addition, there's a lot of \
+              commands related to programming, science, anime and novel.\n"
+        s << "\n"
+        s << "**[Web interface](https://madokami.pw/)**\n"
         s << "**[Let me join your guild!](" << ENV["INVITE_URL"] << ")**\n"
         s << "**[Github](https://github.com/kandayo/akane)**\n"
         s << "\n"
-        s << "```ini\n"
-        s << "[ Redis Stats ]\n"
-        s << "used_memory   => " << info["used_memory_human"] << "\n"
-        s << "keyspace_hits => " << info["keyspace_hits"]     << "\n"
-        s << "\n"
-        s << "[ Cache ]\n"
+        s << "**```ini\n"
+        s << "[ Cache Stats ]\n"
         s << "users    => " << cache.users.size    << "\n"
         s << "roles    => " << cache.roles.size    << "\n"
         s << "guilds   => " << cache.guilds.size   << "\n"
@@ -58,10 +53,9 @@ module Akane
         s << "[ GC Stats ]\n"
         s << "heap_size      => " << gcf(GC.stats.heap_size)      << " MB\n"
         s << "free_bytes     => " << gcf(GC.stats.free_bytes)     << " MB\n"
-        s << "unmaped_bytes  => " << gcf(GC.stats.unmapped_bytes) << " MB\n"
         s << "bytes_since_gc => " << gcf(GC.stats.bytes_since_gc) << " MB\n"
         s << "total_bytes    => " << gcf(GC.stats.total_bytes)    << " MB\n"
-        s << "```"
+        s << "```**"
       end
     end
 
