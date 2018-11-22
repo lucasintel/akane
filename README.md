@@ -10,7 +10,7 @@
 
 # Akane
 
-![Build status](https://img.shields.io/travis/kandayo/akane.svg?logo=discord&style=for-the-badge)
+![Build status](https://img.shields.io/travis/com/kandayo/akane.svg?logo=discord&style=for-the-badge)
 
 Akane is a personal bot that spy on guilds, showing a myriad of stats about
 guilds and users. In addition, there's a lot of commands related to
