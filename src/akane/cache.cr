@@ -2,6 +2,23 @@ module Akane
   class Cache
     alias Snowflake = Discord::Snowflake | UInt64
 
+    struct Guild
+      JSON.mapping(
+        id: Snowflake,
+        name: String,
+        icon: String?,
+        owner_id: Snowflake,
+        region: String
+      )
+
+      def initialize( @id : Snowflake,
+                      @name : String,
+                      @icon : String?,
+                      @owner_id : Snowflake,
+                      @region : String )
+      end
+    end
+
     def initialize(@client : Discord::Client)
     end
 
@@ -95,7 +112,8 @@ module Akane
     end
 
     def cache(guild : Discord::Guild)
-      REDIS.set("guild:#{guild.id}", guild.to_json)
+      g = Guild.new(guild.id, guild.name, guild.icon, guild.owner_id, guild.region)
+      REDIS.set("guild:#{guild.id}", g.to_json)
     end
 
     def cache(role : Discord::Role)
