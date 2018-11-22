@@ -34,7 +34,7 @@ shards:
 
   migrate:
     github: kandayo/migrate.cr
-    commit: 014cdde0af71112a7e5125b090e1990a0f3c20d3
+    commit: f21b8803d42d27f6c506803224a16be0f4afb6c8
 
   pg:
     github: will/crystal-pg
@@ -58,5 +58,5 @@ shards:
 
   tren:
     github: kandayo/tren
-    commit: 488ea8efa9f5d5cd4e331ad99db4f2dc47f48a55
+    commit: 92f3c3634c65dbf75aa5f5714a20eab2295f0de5
 
