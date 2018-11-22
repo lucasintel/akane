@@ -25,7 +25,7 @@ module Akane
       md[0].to_u32/value
     end
 
-    private def description
+    private def description(cache)
       pid = Hardware::PID.new
       info = REDIS.info
 
@@ -41,10 +41,15 @@ module Akane
         s << "```ini\n"
         s << "[ Redis Stats ]\n"
         s << "used_memory      => " << info["used_memory_human"]      << "\n"
-        s << "used_memory_rss  => " << info["used_memory_rss_human"]  << "\n"
-        s << "used_memory_peak => " << info["used_memory_peak_human"] << "\n"
         s << "keyspace_hits    => " << info["keyspace_hits"]          << "\n"
         s << "keyspace_misses  => " << info["keyspace_misses"]        << "\n"
+        s << "\n"
+        s << "[ Cache ]\n"
+        s << "users    => " << cache.users.size    << "\n"
+        s << "members  => " << cache.members.size  << "\n"
+        s << "roles    => " << cache.roles.size    << "\n"
+        s << "guilds   => " << cache.guilds.size   << "\n"
+        s << "channels => " << cache.channels.size << "\n"
         s << "\n"
         s << "[ Memory Stats ]\n"
         s << "VmPeak => " << rf(pid.status["VmPeak"], 4000.0) << " MB\n"
@@ -73,7 +78,7 @@ module Akane
         thumbnail: Discord::EmbedThumbnail.new(url: cache.resolve_current_user.avatar_url),
         footer: Discord::EmbedFooter.new(text: "Use \"!a help\" for info on commands"),
         title: "朱音",
-        description: description,
+        description: description(cache),
         colour: 6844039_u32
       )
 

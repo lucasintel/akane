@@ -11,7 +11,7 @@ START = Time.now
 
 module Akane
   client = Discord::Client.new(ENV["TOKEN"], ENV["CLIENT_ID"].to_u64)
-  cache = Cache.new(client)
+  cache = Discord::Cache.new(client)
   client.cache = cache
 
   REDIS = Redis.new(unixsocket: "/var/run/redis/redis.sock")
