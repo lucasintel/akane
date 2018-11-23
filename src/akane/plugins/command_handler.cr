@@ -20,7 +20,7 @@ module Akane
                     &@handle : Handle )
 
       case @usage
-      when "(codeblock)"
+      when "(codeblock)", "..."
         @args = 0..5000
       else
         arr = @usage.split
