@@ -4,10 +4,6 @@ shards:
     github: veelenga/ameba
     version: 0.8.1
 
-  crystagiri:
-    github: madeindjs/crystagiri
-    version: 0.3.2
-
   db:
     github: crystal-lang/crystal-db
     version: 0.5.1
@@ -40,6 +36,10 @@ shards:
     github: kandayo/migrate.cr
     commit: f21b8803d42d27f6c506803224a16be0f4afb6c8
 
+  myhtml:
+    github: kostya/myhtml
+    version: 1.2.0
+
   pg:
     github: will/crystal-pg
     version: 0.15.0
@@ -62,5 +62,5 @@ shards:
 
   tren:
     github: kandayo/tren
-    commit: 92f3c3634c65dbf75aa5f5714a20eab2295f0de5
+    commit: bd82630e4a0fb2df5f31b59eecdabfdca0400f71
 
