@@ -64,7 +64,7 @@ module Akane
     end
   end
 
-  @[Discord::Plugin::Options(middleware: Middleware::Prefix.new)]
+  @[Discord::Plugin::Options(middleware: {Middleware::Prefix.new, Middleware::IgnoreBots.new})]
   class CommandHandler
     include Discord::Plugin
 
