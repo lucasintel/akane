@@ -23,6 +23,8 @@ dependencies:
   migrate:
     github: kandayo/migrate.cr
     branch: master
+  myhtml:
+    github: kostya/myhtml
   pg:
     github: will/crystal-pg
   redis:

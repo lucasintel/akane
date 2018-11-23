@@ -4,6 +4,10 @@ shards:
     github: veelenga/ameba
     version: 0.8.1
 
+  crystagiri:
+    github: madeindjs/crystagiri
+    version: 0.3.2
+
   db:
     github: crystal-lang/crystal-db
     version: 0.5.1
