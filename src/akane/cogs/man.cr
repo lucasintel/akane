@@ -8,7 +8,10 @@ module Akane
       usage: "(name)"
     )]
     def man(client, payload, args)
-      res = DB.query_one?(DB.find_man, args.first, as: {String, String})
+      res = DB::PG.connection do |db|
+        db.query_one?(DB.find_man, args.first, as: {String, String})
+      end
+
       return unless res
 
       description, url = res

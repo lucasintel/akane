@@ -27,6 +27,8 @@ dependencies:
     github: kostya/myhtml
   pg:
     github: will/crystal-pg
+  pool:
+    github: ysbaddaden/pool
   redis:
     github: stefanwille/crystal-redis
     version: ~> 2.1.1

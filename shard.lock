@@ -62,5 +62,5 @@ shards:
 
   tren:
     github: kandayo/tren
-    commit: bd82630e4a0fb2df5f31b59eecdabfdca0400f71
+    commit: 20532fcde7f285c4ed32c4a0e844544eb47b6d56
 
