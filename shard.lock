@@ -33,8 +33,8 @@ shards:
     commit: d8a8933f6a4eb7d9790c3803cb8bec06c304ea5c
 
   migrate:
-    github: kandayo/migrate.cr
-    commit: f21b8803d42d27f6c506803224a16be0f4afb6c8
+    github: vladfaust/migrate.cr
+    version: 0.4.1
 
   myhtml:
     github: kostya/myhtml

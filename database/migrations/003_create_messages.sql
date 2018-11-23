@@ -25,7 +25,7 @@ create function messages_set_keypresses() returns trigger as $$
     return new;
   end;
 $$ language plpgsql;
--- +migrate end;
+-- +migrate end
 
 create trigger messages_before_update_content
   before insert or update of content on messages

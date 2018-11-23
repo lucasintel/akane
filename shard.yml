@@ -21,8 +21,8 @@ dependencies:
   humanize_time:
     github: mamantoha/humanize_time
   migrate:
-    github: kandayo/migrate.cr
-    branch: master
+    github: vladfaust/migrate.cr
+    version: ~> 0.4.1
   myhtml:
     github: kostya/myhtml
   pg:
