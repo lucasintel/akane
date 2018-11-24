@@ -9,7 +9,7 @@ insert into man_pages (name, description, url)
 
 -- name: find_man
 
-select description, url
+select *
   from man_pages
  where name = $1
  limit 1;

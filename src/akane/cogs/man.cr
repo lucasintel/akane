@@ -1,6 +1,25 @@
+require "myhtml"
+
 module Akane
   module Man
     include Cog
+
+    struct Tlcr
+      ::DB.mapping({
+          name: String,
+          description: String,
+          url: String
+        },
+        strict: false
+      )
+
+      def to_s
+        String.build do |s|
+          s << description << "\n"
+          s << url
+        end
+      end
+    end
 
     @[Command(
       name: "man",
@@ -8,20 +27,15 @@ module Akane
       usage: "(name)"
     )]
     def man(client, payload, args)
-      res = DB::PG.connection do |db|
-        db.query_one?(DB.find_man, args.first, as: {String, String})
-      end
-
+      res = DB::PG.connection(&.query(DB.find_man, args.first))
       return unless res
 
-      description, url = res
+      command = Tlcr.from_rs(res)
 
       embed = Discord::Embed.new(
-        title: args.first,
-        description: String.build do |s|
-          s << description << "\n"
-          s << url
-        end
+        title: command[0].name,
+        description: command[0].to_s,
+        color: 1118482_u32
       )
 
       client.create_message(payload.channel_id, "", embed)
