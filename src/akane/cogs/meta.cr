@@ -2,18 +2,61 @@ require "hardware"
 require "humanize_time"
 
 module Akane
-  module Util
+  module Meta
     include Cog
 
     @[Command(
       name: "ping",
-      description: "Probably the most useless command"
+      description: "Probably the most useless command",
+      hidden: true
     )]
     def ping(client, payload, args)
       await = client.create_message(payload.channel_id, "Pong!")
       time = Time.now - payload.timestamp
 
       client.edit_message(await.channel_id, await.id, "Pong! #{time.milliseconds} ms.")
+    end
+
+    private def cmd_help(args)
+      return unless cmd = Akane::Command[args.first]
+
+      Discord::Embed.new(
+        title: "#{cmd.name} #{cmd.usage}",
+        description: cmd.description,
+        colour: 6844039_u32,
+        footer: Discord::EmbedFooter.new(
+          text: "The number of args must match the range #{cmd.args.to_s}."
+        )
+      )
+    end
+
+    @[Command(
+      name: "help",
+      description: "Probably the most useful command",
+      usage: "(cmd)?",
+      hidden: true
+    )]
+    def help(client, payload, args)
+      if args.any?
+        return client.create_message(payload.channel_id, "", cmd_help(args))
+      end
+
+      commands = Akane::Command.list.each_value.reject(&.hidden)
+
+      embed = Discord::Embed.new(
+        title: "Commands",
+        colour: 6844039_u32,
+        description: String.build do |s|
+          commands.each do |cmd|
+            s << "**!a " << cmd.name << "** ~ " << cmd.description << "\n"
+          end
+        end,
+        footer: Discord::EmbedFooter.new(
+          text: "For more info on a command, use \"!a help (cmd)\"."
+        )
+      )
+
+      client.create_message(payload.channel_id, "", embed)
     end
 
     private def gcf(bytes)
@@ -79,7 +122,8 @@ module Akane
 
     @[Command(
       name: "uptime",
-      description: "Shows the bot's uptime"
+      description: "Shows the bot's uptime",
+      hidden: true
     )]
     def uptime(client, payload, args)
       embed = Discord::Embed.new(
