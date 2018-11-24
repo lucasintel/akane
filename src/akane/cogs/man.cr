@@ -35,7 +35,7 @@ module Akane
       embed = Discord::Embed.new(
         title: command[0].name,
         description: command[0].to_s,
-        color: 1118482_u32
+        colour: 1118482_u32
       )
 
       client.create_message(payload.channel_id, "", embed)
