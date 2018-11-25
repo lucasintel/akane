@@ -1,5 +1,6 @@
 require "discordcr"
 require "discordcr-plugin"
+require "discordcr-dbl"
 require "redis"
 
 require "./akane/*"
@@ -15,6 +16,13 @@ module Akane
   client.cache = cache
 
   REDIS = Redis.new(unixsocket: "/var/run/redis/redis.sock")
+
+  dbl_client = Dbl::Client.new(ENV["DBL_TOKEN"], client)
+  dbl = Dbl::Server.new(ENV["DBL_PASS"])
+
+  dbl.on_vote do |payload|
+    DB.insert_vote(payload)
+  end
 
   Discord::Plugin.plugins.each do |plugin|
     client.register(plugin)

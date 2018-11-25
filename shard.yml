@@ -10,6 +10,9 @@ dependencies:
   discordcr:
     github: meew0/discordcr
     branch: master
+  discordcr-dbl:
+    github: kandayo/discordcr-dbl
+    branch: master
   discordcr-middleware:
     github: z64/discordcr-middleware
     branch: master

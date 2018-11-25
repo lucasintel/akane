@@ -12,6 +12,10 @@ shards:
     github: meew0/discordcr
     commit: ba79c678c100fb310dde6af4dcbcb7dba2e95fa3
 
+  discordcr-dbl:
+    github: kandayo/discordcr-dbl
+    commit: fb62edc3e5e0dc6a9ea2638ea6cd709bfbc9aeae
+
   discordcr-middleware:
     github: z64/discordcr-middleware
     commit: 562d68698114473465793112fee98ce12fa2a5ca
@@ -32,6 +36,10 @@ shards:
     github: TechMagister/i18n.cr
     commit: d8a8933f6a4eb7d9790c3803cb8bec06c304ea5c
 
+  kilt:
+    github: jeromegn/kilt
+    version: 0.4.0
+
   migrate:
     github: vladfaust/migrate.cr
     version: 0.4.1
@@ -48,9 +56,17 @@ shards:
     github: ysbaddaden/pool
     version: 0.2.3
 
+  radix:
+    github: luislavena/radix
+    version: 0.3.8
+
   rate_limiter:
     github: z64/rate_limiter
     commit: b9992a7c474f9f863aa34ac677244d6b520cba97
+
+  raze:
+    github: samueleaton/raze
+    version: 0.3.0
 
   redis:
     github: stefanwille/crystal-redis
