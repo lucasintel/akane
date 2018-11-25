@@ -9,8 +9,8 @@ shards:
     version: 0.5.1
 
   discordcr:
-    github: greenbigfrog/discordcr
-    commit: 9078931263d31e560d8303aa0f6b0f001dd6d034
+    github: meew0/discordcr
+    commit: ba79c678c100fb310dde6af4dcbcb7dba2e95fa3
 
   discordcr-middleware:
     github: z64/discordcr-middleware

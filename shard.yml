@@ -8,8 +8,8 @@ crystal: 0.27.0
 
 dependencies:
   discordcr:
-    github: greenbigfrog/discordcr
-    branch: new-cr
+    github: meew0/discordcr
+    branch: master
   discordcr-middleware:
     github: z64/discordcr-middleware
     branch: master
@@ -42,7 +42,7 @@ development_dependencies:
     version: 0.8.1
 
 targets:
-  micrate:
+  migrate:
     main: database/migrate.cr
   akane:
     main: src/akane.cr
