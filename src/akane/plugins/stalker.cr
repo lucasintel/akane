@@ -20,10 +20,7 @@ module Akane
 
     @[Discord::Handler(event: :message_create)]
     def message_create(payload, ctx)
-      channel = ctx[Middleware::TextChannel].channel.as(Discord::Channel)
-      guild = channel.guild_id.as(Discord::Snowflake)
-
-      DB.insert_msg(payload, guild)
+      DB.insert_msg(payload)
 
       if md = payload.content.match(/<#(?<channel_id>\d+)>/)
         DB.insert_mention(payload.id, "channel", md["channel_id"].to_u64)

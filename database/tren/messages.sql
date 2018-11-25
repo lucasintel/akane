@@ -1,9 +1,9 @@
--- name: insert_msg(msg : Discord::Message, gid : Discord::Snowflake)
+-- name: insert_msg(msg : Discord::Message)
 
 insert into messages (id, guild_id, channel_id, user_id, tts, mention_everyone, embeds, content, "timestamp")
      values (
        {{msg.id}},
-       {{gid}},
+       {{msg.guild_id}},
        {{msg.channel_id}},
        {{msg.author.id}},
        {{msg.tts}},
