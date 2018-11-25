@@ -1,11 +1,9 @@
 module Akane
-  module Middleware
-    class IgnoreBots
-      def call(payload : Discord::Message, _ctx : Discord::Context)
-        return if payload.author.bot
+  class IgnoreBots
+    def call(payload : Discord::Message, _ctx : Discord::Context)
+      return if payload.author.bot
 
-        yield
-      end
+      yield
     end
   end
 end

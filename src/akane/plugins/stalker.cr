@@ -1,5 +1,5 @@
 module Akane
-  @[Discord::Plugin::Options(middleware: Middleware::TextChannel.new)]
+  @[Discord::Plugin::Options(middleware: TextChannel.new)]
   class MessageStalker
     include Discord::Plugin
 
