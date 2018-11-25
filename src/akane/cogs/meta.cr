@@ -17,30 +17,17 @@ module Akane
       client.edit_message(await.channel_id, await.id, "Pong! #{time.milliseconds} ms.")
     end
 
-    private def cmd_help(args)
-      return unless cmd = Akane::Command[args.first]
-
-      Discord::Embed.new(
-        title: "#{cmd.name} #{cmd.usage}",
-        description: cmd.description,
-        colour: 6844039_u32,
-        footer: Discord::EmbedFooter.new(
-          text: "The number of args must match the range #{cmd.args.to_s}."
-        )
-      )
+    @[SubCommand("ping", "--lol")]
+    def ping_lol(client, payload, args)
+      client.create_message(payload.channel_id, "lol")
     end
 
     @[Command(
       name: "help",
       description: "Probably the most useful command",
-      usage: "(cmd)?",
       hidden: true
     )]
     def help(client, payload, args)
-      if args.any?
-        return client.create_message(payload.channel_id, "", cmd_help(args))
-      end
-
       commands = Akane::Command.list.each_value.reject(&.hidden)
 
       embed = Discord::Embed.new(
@@ -52,7 +39,7 @@ module Akane
           end
         end,
         footer: Discord::EmbedFooter.new(
-          text: "For more info on a command, use \"!a help (cmd)\"."
+          text: "For more info on a command, use \"!a (cmd) --help\"."
         )
       )
 
