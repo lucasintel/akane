@@ -14,11 +14,11 @@ shards:
 
   discordcr-dbl:
     github: kandayo/discordcr-dbl
-    commit: fb62edc3e5e0dc6a9ea2638ea6cd709bfbc9aeae
+    commit: 979209a6dd054026e4038c123ca5299c092b6ec1
 
   discordcr-middleware:
     github: z64/discordcr-middleware
-    commit: 562d68698114473465793112fee98ce12fa2a5ca
+    commit: 1606ec9a61aa8aa1c04810227fd796807f8ffb93
 
   discordcr-plugin:
     github: z64/discordcr-plugin

@@ -48,6 +48,6 @@ targets:
   migrate:
     main: database/migrate.cr
   akane:
-    main: src/akane.cr
+    main: src/entrypoint.cr
 
 license: MIT
