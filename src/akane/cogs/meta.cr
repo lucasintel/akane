@@ -17,11 +17,6 @@ module Akane
       client.edit_message(await.channel_id, await.id, "Pong! #{time.milliseconds} ms.")
     end
 
-    @[SubCommand("ping", "--lol")]
-    def ping_lol(client, payload, args)
-      client.create_message(payload.channel_id, "lol")
-    end
-
     @[Command(
       name: "help",
       description: "Probably the most useful command",
