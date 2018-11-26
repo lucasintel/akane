@@ -5,18 +5,22 @@ module Akane
     include Cog
 
     struct Man
-      ::DB.mapping({
-          name: String,
-          description: String,
-          url: String
-        },
-        strict: false
+      ::DB.mapping(
+        name: String,
+        description: String,
+        url: String
       )
 
       def to_s
         String.build do |s|
           s << description << "\n"
           s << url
+        end
+      end
+
+      def self.find(name)
+        DB::PG.connection do |pg|
+          from_rs(pg.query(DB.find_man, name))
         end
       end
     end
@@ -27,14 +31,11 @@ module Akane
       usage: "(name)"
     )]
     def man(client, payload, args)
-      res = DB::PG.connection(&.query(DB.find_man, args))
-      return unless res
-
-      command = Man.from_rs(res)
+      return unless command = Man.find(args).first?
 
       embed = Discord::Embed.new(
-        title: command[0].name,
-        description: command[0].to_s,
+        title: command.name,
+        description: command.to_s,
         colour: 6844039_u32
       )
 
