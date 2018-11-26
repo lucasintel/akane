@@ -12,7 +12,7 @@ module Akane
 
     class_getter list = {} of String => Command
 
-    alias Handle = Discord::Client, Discord::Message, Array(String) -> Nil
+    alias Handle = Discord::Client, Discord::Message, String -> Nil
 
     def initialize( @name,
                     @description = "",
@@ -143,10 +143,10 @@ module Akane
       message = payload.content.sub(PREFIX, "")
       return unless cmd = message.match(/^\w+(?:\s--\w+)?/).try(&.[0])
 
-      args = message.sub(cmd, "").split
+      args = message.sub(cmd, "")
 
       return unless command = Command[cmd]
-      return unless command.args === args.size
+      return unless command.args === args.split.size
 
       if limiter = command.limiter
         return unless rate_limited?(payload.author.id, cmd, limiter)
@@ -154,7 +154,7 @@ module Akane
         return unless rate_limited?(payload.author.id)
       end
 
-      command.handle.call(client, payload, args)
+      command.handle.call(client, payload, args.lstrip)
     end
   end
 end

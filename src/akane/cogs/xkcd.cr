@@ -23,7 +23,7 @@ module Akane
       usage: "(id)?"
     )]
     def xkcd(client, payload, args)
-      res = HTTP::Client.get("https://xkcd.com/#{args.join}/info.0.json")
+      res = HTTP::Client.get("https://xkcd.com/#{args}/info.0.json")
       return unless res.success?
 
       comic = Comic.from_json(res.body)

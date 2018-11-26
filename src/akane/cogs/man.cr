@@ -27,7 +27,7 @@ module Akane
       usage: "(name)"
     )]
     def man(client, payload, args)
-      res = DB::PG.connection(&.query(DB.find_man, args.first))
+      res = DB::PG.connection(&.query(DB.find_man, args))
       return unless res
 
       command = Man.from_rs(res)

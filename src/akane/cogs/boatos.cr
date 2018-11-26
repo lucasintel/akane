@@ -32,7 +32,7 @@ module Akane
       hidden: true
     )]
     def boato(client, payload, args)
-      res = HTTP::Client.get("https://www.boatos.org/?s=#{args.join("+")}")
+      res = HTTP::Client.get("https://www.boatos.org/?s=#{args.tr(" ", "+")}")
       return unless res.success?
 
       articles = Myhtml::Parser.new(res.body).nodes(:article)
