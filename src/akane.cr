@@ -14,6 +14,7 @@ START = Time.now
 module Akane
   class Shard
     getter client : Discord::Client
+    getter id : Int32
     getter ready : Bool?
 
     delegate run, to: client
@@ -25,26 +26,28 @@ module Akane
         shard: { shard_id: shard_id, num_shards: shards }
       )
 
-      @client.cache = cache
-      @client.on_ready { @ready == true }
+      @id = shard_id
 
-      register_plugins!
+      @client.cache = cache
+      @client.on_ready { @ready = true }
+
+      register_plugins
     end
 
-    def register_plugins!
+    def register_plugins
       Discord::Plugin.plugins.each do |plugin|
         client.register(plugin)
       end
     end
   end
 
-  @@num_shards = 1
-  @@shards = [] of Shard
+  class_property num_shards = 1
+  class_property shards = [] of Shard
 
   def self.shard(guild_id : UInt64 | Discord::Snowflake | Nil = nil)
     return @@shards.first unless guild_id
 
-    shard_id = (guild_id >> 22) % @@num_shards
+    shard_id = (guild_id.to_u64 >> 22) % @@num_shards
     @@shards[shard_id]
   end
 

@@ -103,6 +103,34 @@ module Akane
     end
 
     @[Command(
+      name: "shard",
+      description: "Show shards information",
+      hidden: true
+    )]
+    def shard_info(client, payload, args)
+      info = String.build do |s|
+        s << "**```ini\n"
+        Akane.shards.each_with_index do |shard, id|
+          shard_status = shard.ready ? "ready" : "..."
+          s << "[ ガイア主義者 " << id << " ] " << shard_status << "\n"
+        end
+        s << "```**"
+      end
+
+      client.create_message(payload.channel_id, info)
+    end
+
+    @[SubCommand("shard", "--guild")]
+    def shard_guild(client, payload, args)
+      embed = Discord::Embed.new(
+        description: "ガイア主義者 #{Akane.shard(payload.guild_id).id}",
+        colour: 6844039_u32
+      )
+
+      client.create_message(payload.channel_id, "", embed)
+    end
+
+    @[Command(
       name: "uptime",
       description: "Shows the bot's uptime",
       hidden: true
