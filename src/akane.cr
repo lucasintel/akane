@@ -14,10 +14,11 @@ START = Time.now
 module Akane
   class Shard
     getter client : Discord::Client
+    getter created_at = Time.utc_now
     getter id : Int32
     getter ready : Bool?
 
-    delegate run, to: client
+    delegate run, stop, to: client
 
     def initialize(cache, shard_id, shards)
       @client = Discord::Client.new(
@@ -41,7 +42,7 @@ module Akane
     end
   end
 
-  class_property num_shards = 1
+  class_property num_shards : Int32 = 1
   class_property shards = [] of Shard
 
   def self.shard(guild_id : UInt64 | Discord::Snowflake | Nil = nil)
@@ -49,6 +50,24 @@ module Akane
 
     shard_id = (guild_id.to_u64 >> 22) % @@num_shards
     @@shards[shard_id]
+  end
+
+  def self.handle_shards(rest_client, cache)
+    loop {
+      @@num_shards = rest_client.get_gateway_bot.shards
+      next unless @@num_shards != @@shards.size
+
+      @@shards.each(&.stop)
+      @@shards.clear
+
+      @@num_shards.times do |shard_id|
+        shard = Shard.new(cache, shard_id, @@num_shards)
+        @@shards << shard
+        spawn { shard.run }
+      end
+
+      sleep 18000
+    }
   end
 
   def self.register_dbl(cache)
@@ -66,13 +85,7 @@ module Akane
     rest_client = Discord::Client.new(ENV["TOKEN"], ENV["CLIENT_ID"].to_u64)
     cache = Discord::Cache.new(rest_client)
 
-    shards = @@num_shards = rest_client.get_gateway_bot.shards
-
-    shards.times do |shard_id|
-      shard = Shard.new(cache, shard_id, shards)
-      @@shards << shard
-      spawn { shard.run }
-    end
+    spawn handle_shards(rest_client, cache)
 
     register_dbl(cache)
   end

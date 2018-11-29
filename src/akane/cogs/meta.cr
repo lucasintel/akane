@@ -1,5 +1,6 @@
 require "hardware"
 require "humanize_time"
+require "terminal_table"
 
 module Akane
   module Meta
@@ -108,26 +109,26 @@ module Akane
       hidden: true
     )]
     def shard_info(client, payload, args)
+      table = TerminalTable.new
+      table.headings = ["Shard", "Status", "Time"]
+
+      current_shard = Akane.shard(payload.guild_id).id
+
+      Akane.shards.each do |shard|
+        table << [
+          "gaia #{shard.id}#{"*" if shard.id == current_shard}",
+          shard.ready ? "ready" : "...",
+          shard.created_at.to_s
+        ]
+      end
+
       info = String.build do |s|
-        s << "**```ini\n"
-        Akane.shards.each_with_index do |shard, id|
-          shard_status = shard.ready ? "ready" : "..."
-          s << "[ ガイア主義者 " << id << " ] " << shard_status << "\n"
-        end
+        s << "**```prolog\n"
+        s << table.render << "\n"
         s << "```**"
       end
 
       client.create_message(payload.channel_id, info)
-    end
-
-    @[SubCommand("shard", "--guild")]
-    def shard_guild(client, payload, args)
-      embed = Discord::Embed.new(
-        description: "ガイア主義者 #{Akane.shard(payload.guild_id).id}",
-        colour: 6844039_u32
-      )
-
-      client.create_message(payload.channel_id, "", embed)
     end
 
     @[Command(
