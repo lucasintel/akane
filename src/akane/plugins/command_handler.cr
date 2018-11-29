@@ -2,6 +2,7 @@ module Akane
   class Command
     getter name : String
     getter description : String
+    getter missing_args : String?
     getter hidden : Bool
     getter usage : String
     getter limiter : UInt8?
@@ -12,17 +13,19 @@ module Akane
 
     class_getter list = {} of String => Command
 
-    alias Handle = Discord::Client, Discord::Message, String -> Nil
+    alias Return = Discord::Message | String | Discord::Embed | Nil
+    alias Handle = Proc(Discord::Client, Discord::Message, String, Return)
 
     def initialize( @name,
                     @description = "",
+                    @missing_args = nil,
                     @usage = "",
                     @hidden = false,
                     @limiter = nil,
                     &@handle : Handle )
 
       case @usage
-      when "(codeblock)", "..."
+      when .includes?("codeblock"), .includes?("...")
         @args = 0..5000
       else
         arr = @usage.split
@@ -61,11 +64,12 @@ module Akane
       macro method_added(method)
         \{% if ann = method.annotation(Command) %}
           Akane::Command.new(
-              name:        \{{ann[:name]}},
-              description: \{{ann[:description]}},
-              usage:       \{{ann[:usage]}} || "",
-              hidden:      \{{ann[:hidden]}} || false,
-              limiter:     \{{ann[:limiter]}}
+              name:         \{{ann[:name]}},
+              description:  \{{ann[:description]}},
+              missing_args: \{{ann[:missing_args]}},
+              usage:        \{{ann[:usage]}} || "",
+              hidden:       \{{ann[:hidden]}} || false,
+              limiter:      \{{ann[:limiter]}}
             ) do |client, payload, args|
 
             \{{method.name}}(client, payload, args)
@@ -85,7 +89,7 @@ module Akane
 
         \{% if ann = method.annotation(SubCommand) %}
           raise "Undefined command" unless command = Akane::Command[\{{ann[0]}}]
-          command.subcommands << \{{ann[1]}}
+          command.subcommands << "#{\{{ann[1]}}} #{\{{ann[2]}}}"
 
           Akane::Command.new(
               name: "#{\{{ann[0]}}} #{\{{ann[1]}}}",
@@ -101,7 +105,7 @@ module Akane
       def command_help(client, payload, command)
         cmd = Akane::Command[command].as(Akane::Command)
 
-        embed = Discord::Embed.new(
+        Discord::Embed.new(
           title: "#{cmd.name} #{cmd.usage}",
           description: String.build do |s|
             s << cmd.description << "\n"
@@ -113,8 +117,6 @@ module Akane
             text: "The number of args must match the range #{cmd.args.to_s}."
           )
         )
-
-        client.create_message(payload.channel_id, "", embed)
       end
     end
   end
@@ -146,7 +148,14 @@ module Akane
       args = message.sub(cmd, "")
 
       return unless command = Command[cmd]
-      return unless command.args === args.split.size
+
+      unless command.args === args.split.size
+        if msg = command.missing_args
+          client.create_message(payload.channel_id, msg)
+        end
+
+        return
+      end
 
       if limiter = command.limiter
         return unless rate_limited?(payload.author.id, cmd, limiter)
@@ -154,7 +163,12 @@ module Akane
         return unless rate_limited?(payload.author.id)
       end
 
-      command.handle.call(client, payload, args.lstrip)
+      case res = command.handle.call(client, payload, args.lstrip)
+      when String
+        client.create_message(payload.channel_id, res)
+      when Discord::Embed
+        client.create_message(payload.channel_id, "", res)
+      end
     end
   end
 end

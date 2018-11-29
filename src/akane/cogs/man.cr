@@ -28,18 +28,17 @@ module Akane
     @[Command(
       name: "man",
       description: "Simplified and community-driven man pages.",
+      missing_args: "What manual page do you want?",
       usage: "(name)"
     )]
     def man(client, payload, args)
-      return unless command = Man.find(args).first?
+      return "Not found" unless command = Man.find(args).first?
 
-      embed = Discord::Embed.new(
+      Discord::Embed.new(
         title: command.name,
         description: command.to_s,
         colour: 6844039_u32
       )
-
-      client.create_message(payload.channel_id, "", embed)
     end
   end
 end

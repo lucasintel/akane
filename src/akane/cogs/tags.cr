@@ -36,10 +36,11 @@ module Akane
     @[Command(
       name: "tag",
       description: "Create a custom tag and display it on command",
+      missing_args: "What tag do you want?",
       usage: "(name)"
     )]
     def tag(client, payload, args)
-      return unless tag = Tag.find(payload.guild_id, args.split.first).first?
+      return "Tag not found." unless tag = Tag.find(payload.guild_id, args).first?
 
       if tag.attachment
         client.upload_file(payload.channel_id, tag.content, tag.file)
@@ -48,13 +49,10 @@ module Akane
       end
     end
 
-    @[SubCommand("tag", "--create", "...")]
+    @[SubCommand("tag", "--create", "(name) (...)")]
     def tag_create(client, payload, args)
-      return unless tag_name = args.split.first?
-
-      if Tag.exists?(payload.guild_id, tag_name)
-        return client.create_message(payload.channel_id, "Tag already exists.")
-      end
+      return "What is the tag name?" unless tag_name = args.split.first?
+      return "Tag already exists." if Tag.exists?(payload.guild_id, tag_name)
 
       content = args.sub(tag_name, "")
 
@@ -62,9 +60,9 @@ module Akane
         HTTP::Client.get(attach.url) do |res|
           File.write("#{ATTACH_DIR}/#{attach.id}_#{attach.filename}", res.body_io)
         end
-      else
-        return if content.empty?
       end
+
+      return "Missing content." if !attach && content.empty?
 
       DB.insert_tag(
         guild_id: payload.guild_id.as(Discord::Snowflake),
@@ -74,17 +72,17 @@ module Akane
         content: content.lchop
       )
 
-      client.create_message(payload.channel_id, "Tag successfully created.")
+      "Tag successfully created."
     end
 
     @[SubCommand("tag", "--delete", "(name)")]
     def tag_delete(client, payload, args)
-      return unless tag = Tag.find(payload.guild_id, args).first?
-      return unless tag.user_id.to_u64 == payload.author.id
+      return "Tag not found." unless tag = Tag.find(payload.guild_id, args).first?
+      return "You can't delete someone else's tag." unless tag.user_id.to_u64 == payload.author.id
 
       DB.delete_tag(payload.guild_id.as(Discord::Snowflake), tag.name)
 
-      client.create_message(payload.channel_id, "Tag successfully deleted.")
+      "Tag successfully deleted."
     end
   end
 end

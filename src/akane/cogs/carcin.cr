@@ -50,7 +50,7 @@ module Akane
         lang = {"crystal", "0.27.0"}
       end
 
-      return unless res = run_request(lang, md["code"])
+      return "Request failed" unless res = run_request(lang, md["code"])
 
       fields = [] of Discord::EmbedField
 
@@ -61,15 +61,13 @@ module Akane
         ]
        end
 
-      embed = Discord::Embed.new(
+      Discord::Embed.new(
         title: "Result",
         description: res.html_url,
         colour: 6844039_u32,
         fields: fields,
         footer: Discord::EmbedFooter.new(text: "#{res.language} #{res.version}")
       )
-
-      client.create_message(payload.channel_id, "", embed)
     end
   end
 end

@@ -26,7 +26,7 @@ module Akane
     def help(client, payload, args)
       commands = Akane::Command.list.each_value.reject(&.hidden)
 
-      embed = Discord::Embed.new(
+      Discord::Embed.new(
         title: "Commands",
         colour: 6844039_u32,
         description: String.build do |s|
@@ -38,8 +38,6 @@ module Akane
           text: "For more info on a command, use \"!a (cmd) --help\"."
         )
       )
-
-      client.create_message(payload.channel_id, "", embed)
     end
 
     private def gcf(bytes)
@@ -92,15 +90,13 @@ module Akane
     def info(client, payload, args)
       cache = client.cache.as(Discord::Cache)
 
-      embed = Discord::Embed.new(
+      Discord::Embed.new(
         thumbnail: Discord::EmbedThumbnail.new(url: cache.resolve_current_user.avatar_url),
         footer: Discord::EmbedFooter.new(text: "Use \"!a help\" for info on commands"),
         title: "朱音",
         description: description(cache),
         colour: 6844039_u32
       )
-
-      client.create_message(payload.channel_id, "", embed)
     end
 
     @[Command(
@@ -137,21 +133,10 @@ module Akane
       hidden: true
     )]
     def uptime(client, payload, args)
-      embed = Discord::Embed.new(
+      Discord::Embed.new(
         title: "Uptime",
         description: HumanizeTime.distance_of_time_in_words(START, Time.now)
       )
-
-      client.create_message(payload.channel_id, "", embed)
-    end
-
-    @[Command(
-      name: "invite",
-      description: "Let me join your guild!",
-      limiter: 1_u8
-    )]
-    def invite(client, payload, args)
-      client.create_message(payload.channel_id, ENV["INVITE_URL"])
     end
   end
 end

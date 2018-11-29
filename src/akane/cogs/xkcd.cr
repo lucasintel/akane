@@ -24,18 +24,16 @@ module Akane
     )]
     def xkcd(client, payload, args)
       res = HTTP::Client.get("https://xkcd.com/#{args}/info.0.json")
-      return unless res.success?
+      return "Request failed." unless res.success?
 
       comic = Comic.from_json(res.body)
 
-      embed = Discord::Embed.new(
+      Discord::Embed.new(
         title: "#{comic.title} (##{comic.num})",
         colour: 9873608_u32,
         image: Discord::EmbedImage.new(url: comic.img),
         footer: Discord::EmbedFooter.new(text: comic.published_at)
       )
-
-      client.create_message(payload.channel_id, "", embed)
     end
   end
 end
