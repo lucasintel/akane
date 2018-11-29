@@ -2,10 +2,8 @@ module Akane
   class Command
     getter name : String
     getter description : String
-    getter missing_args : String?
     getter hidden : Bool
     getter usage : String
-    getter limiter : UInt8?
     getter args : Range(Int32, Int32)
     getter handle : Handle
 
@@ -16,16 +14,10 @@ module Akane
     alias Return = Discord::Message | String | Discord::Embed | Nil
     alias Handle = Proc(Discord::Client, Discord::Message, String, Return)
 
-    def initialize( @name,
-                    @description = "",
-                    @missing_args = nil,
-                    @usage = "",
-                    @hidden = false,
-                    @limiter = nil,
-                    &@handle : Handle )
-
+    def initialize(@name, @description = "", @usage = "", @hidden = false, &@handle : Handle)
       case @usage
-      when .includes?("codeblock"), .includes?("...")
+      when .includes?("codeblock"),
+           .includes?("...")
         @args = 0..5000
       else
         arr = @usage.split
@@ -34,12 +26,6 @@ module Akane
       end
 
       Command[@name] = self
-    end
-
-    def sub_help : Array(String)
-      @subcommands.map do |cmd|
-        "**#{cmd}** #{Command[cmd].try(&.usage)}"
-      end
     end
 
     def self.[]=(k : String, v : Command)
@@ -66,10 +52,8 @@ module Akane
           Akane::Command.new(
               name:         \{{ann[:name]}},
               description:  \{{ann[:description]}},
-              missing_args: \{{ann[:missing_args]}},
               usage:        \{{ann[:usage]}} || "",
-              hidden:       \{{ann[:hidden]}} || false,
-              limiter:      \{{ann[:limiter]}}
+              hidden:       \{{ann[:hidden]}} || false
             ) do |client, payload, args|
 
             \{{method.name}}(client, payload, args)
@@ -110,7 +94,10 @@ module Akane
           description: String.build do |s|
             s << cmd.description << "\n"
             s << "\n"
-            s << cmd.sub_help.join("\n")
+
+            cmd.subcommands.each do |cmd|
+              s << "**" << cmd << "** " << Akane::Command[cmd].try(&.usage)
+            end
           end,
           colour: 6844039_u32,
           footer: Discord::EmbedFooter.new(
@@ -121,47 +108,20 @@ module Akane
     end
   end
 
-  @[Discord::Plugin::Options(middleware: {Prefix.new, IgnoreBots.new})]
+  @[Discord::Plugin::Options(middleware: {
+    IgnoreBots.new,
+    Limiter.new(:commands),
+    Prefix.new,
+    CommandParser.new(/^\w+(?:\s--\w+)?/),
+    ArgumentParser.new
+  })]
   class CommandHandler
     include Discord::Plugin
 
-    alias Snowflake = Discord::Snowflake | UInt64
-
-    def rate_limited?(id : Snowflake, namespace = "commands", max = 5_u8)
-      query = "rate:#{id}:#{namespace}:#{Time.now.minute}"
-
-      if limiter = REDIS.get(query)
-        return false if limiter.to_u8 >= max
-      end
-
-      REDIS.multi do |multi|
-        multi.incr(query)
-        multi.expire(query, 59)
-      end
-    end
-
     @[Discord::Handler(event: :message_create)]
     def handle(payload : Discord::Message, ctx : Discord::Context)
-      message = payload.content.sub(PREFIX, "")
-      return unless cmd = message.match(/^\w+(?:\s--\w+)?/).try(&.[0])
-
-      args = message.sub(cmd, "")
-
-      return unless command = Command[cmd]
-
-      unless command.args === args.split.size
-        if msg = command.missing_args
-          client.create_message(payload.channel_id, msg)
-        end
-
-        return
-      end
-
-      if limiter = command.limiter
-        return unless rate_limited?(payload.author.id, cmd, limiter)
-      else
-        return unless rate_limited?(payload.author.id)
-      end
+      command = ctx[CommandParser].command.as(Akane::Command)
+      args = ctx[ArgumentParser].args.as(String)
 
       case res = command.handle.call(client, payload, args.lstrip)
       when String

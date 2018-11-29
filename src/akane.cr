@@ -1,14 +1,14 @@
 require "discordcr"
 require "discordcr-plugin"
 require "discordcr-dbl"
-require "redis"
+require "logger"
 
 require "./akane/*"
 require "./akane/middleware/*"
 require "./akane/plugins/*"
 require "./akane/cogs/*"
 
-REDIS = Redis.new(unixsocket: "/var/run/redis/redis.sock")
+LOG = Logger.new(STDOUT, progname: "akane")
 START = Time.now
 
 module Akane
@@ -56,6 +56,8 @@ module Akane
     loop {
       @@num_shards = rest_client.get_gateway_bot.shards
       next unless @@num_shards != @@shards.size
+
+      LOG.info("Resharding to #{@@num_shards}...")
 
       @@shards.each(&.stop)
       @@shards.clear

@@ -36,7 +36,6 @@ module Akane
     @[Command(
       name: "tag",
       description: "Create a custom tag and display it on command",
-      missing_args: "What tag do you want?",
       usage: "(name)"
     )]
     def tag(client, payload, args)

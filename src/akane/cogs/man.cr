@@ -28,7 +28,6 @@ module Akane
     @[Command(
       name: "man",
       description: "Simplified and community-driven man pages.",
-      missing_args: "What manual page do you want?",
       usage: "(name)"
     )]
     def man(client, payload, args)
