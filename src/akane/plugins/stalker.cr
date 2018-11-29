@@ -6,6 +6,7 @@ module Akane
     @[Discord::Handler(event: :message_reaction_add)]
     def reaction_add(payload, _ctx)
       DB.insert_reaction(payload)
+    rescue ex : PQ::PQError
     end
 
     @[Discord::Handler(event: :message_reaction_remove)]
