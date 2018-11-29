@@ -96,7 +96,7 @@ module Akane
             s << "\n"
 
             cmd.subcommands.each do |cmd|
-              s << "**" << cmd << "** " << Akane::Command[cmd].try(&.usage)
+              s << "**" << cmd << "** " << Akane::Command[cmd].try(&.usage) << "\n"
             end
           end,
           colour: 6844039_u32,
