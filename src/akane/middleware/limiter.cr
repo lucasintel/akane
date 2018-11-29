@@ -15,7 +15,7 @@ module Akane
           client.create_message(payload.channel_id, msg)
         end
 
-        LOG.debug("User #{payload.author.id}_#{payload.channel_id} rate limited.")
+        LOG.info("User #{payload.author.id}_#{payload.channel_id} rate limited.")
 
         return
       end
