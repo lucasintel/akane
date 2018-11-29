@@ -76,6 +76,10 @@ module Akane
     dbl_client = Dbl::Client.new(ENV["DBL_TOKEN"], cache)
     dbl_client.start
 
+    dbl_client.on_post do |res|
+      LOG.info("POST dbl_stats #{res.status_code}")
+    end
+
     dbl = Dbl::Server.new(ENV["DBL_PASS"])
 
     dbl.on_vote do |payload|
