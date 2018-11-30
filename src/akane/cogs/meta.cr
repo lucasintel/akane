@@ -152,5 +152,20 @@ module Akane
 
       "#{REPO}/blob/master#{cmd.file.partition("akane")[2]}#L#{cmd.line}"
     end
+
+    @[Command(
+      name: "license",
+      description: "Shows the bot license",
+      hidden: true
+    )]
+    def license(client, payload, args)
+      Discord::Embed.new(
+        title: "LICENSE.md",
+        url: "https://github.com/kandayo/akane/blob/master/LICENSE.🍣.md",
+        description: "As long as you retain this notice you can do whatever you want \
+          with this stuff. If we meet some day, and you think this stuff is worth it, \
+          you can buy me a **sushi** :sushi: in return."
+      )
+    end
   end
 end
