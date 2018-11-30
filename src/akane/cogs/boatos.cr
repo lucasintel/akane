@@ -4,25 +4,19 @@ module Akane
   module Boatos
     include Cog
 
-    private def generate_embed(description, title = "", url = "", image = "", published_at = nil)
-      case published_at
-      when String
-        timestamp = Time.parse(published_at, "%d/%m/%Y", Time::Location.local)
-      when Nil
-        timestamp = Time.now
+    struct Article
+      getter title : String
+      getter url : String
+      getter image : String?
+      getter description : String
+      getter published_at : String
+
+      def initialize(@title, @image, @description, @url, @published_at)
       end
 
-      Discord::Embed.new(
-        author: Discord::EmbedAuthor.new(
-          name: "Boatos.org",
-          url: "https://www.boatos.org/"
-        ),
-        title: title,
-        image: Discord::EmbedImage.new(url: image.as(String)),
-        url: url,
-        description: description,
-        timestamp: timestamp
-      )
+      def timestamp : Time
+        @timestamp ||= Time.parse(published_at, "%d/%m/%Y", Time::Location.local)
+      end
     end
 
     @[Command(
@@ -33,36 +27,54 @@ module Akane
     )]
     def boato(client, payload, args)
       res = HTTP::Client.get("https://www.boatos.org/?s=#{args.tr(" ", "+")}")
-      return unless res.success?
+      return "Request failed." unless res.success?
 
       articles = Myhtml::Parser.new(res.body).nodes(:article)
-      return unless articles
+      return "Failed to parse page." unless articles
 
       if articles.size > 1
-        links = articles.each_with_object([] of String) do |article, links|
-          link = article.css(".entry-title a").first
-          links << "- [#{link.inner_text}](#{link.attribute_by("href")})"
+        links = String.build do |s|
+          articles.each do |article|
+            link = article.css(".entry-title a").first.inner_text
+            url = article.css(".entry-title a").first.attribute_by("href")
+
+            s << "- [" << link.gsub(" #boato", "") << "](" << url << ")\n"
+          end
         end
 
-        embed = generate_embed(description: links[0..5].join("\n"))
+        Discord::Embed.new(
+          author: Discord::EmbedAuthor.new(
+            name: "Boatos.org",
+            url: "https://www.boatos.org/"
+          ),
+          description: links.lines.first(5).join("\n"),
+          colour: 3553598_u32,
+          timestamp: Time.utc_now
+        )
       else
         article = articles.first
 
-        image_url = article.css(".featured-image img")
-                           .first?.try(&.attribute_by("src").as(String))
-
-        link = article.css(".entry-title a").first
-
-        embed = generate_embed(
-          title: link.inner_text,
-          url: link.attribute_by("href").as(String),
-          image: image_url,
+        boato = Article.new(
+          title: article.css(".entry-title a").first.inner_text.gsub(" #boato", ""),
+          url: article.css(".entry-title a").first.attribute_by("href").as(String),
+          image: article.css(".featured-image img").first.try(&.attribute_by("src")),
           description: article.css(".entry-content p").first.inner_text,
           published_at: article.css(".entry-date").first.inner_text
         )
-      end
 
-      client.create_message(payload.channel_id, "", embed)
+        Discord::Embed.new(
+          author: Discord::EmbedAuthor.new(
+            name: "Boatos.org",
+            url: "https://www.boatos.org/"
+          ),
+          title: boato.title,
+          url: boato.url,
+          image: Discord::EmbedImage.new(url: boato.image.as(String)),
+          description: boato.description,
+          colour: 6844039_u32,
+          timestamp: boato.timestamp
+        )
+      end
     end
   end
 end
