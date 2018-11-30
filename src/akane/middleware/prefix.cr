@@ -1,5 +1,5 @@
 module Akane
-  PREFIX = /!a |<@#{ENV["CLIENT_ID"]}> /
+  PREFIX = /!a |ak |<@#{ENV["CLIENT_ID"]}> /
 
   class Prefix
     def call(payload : Discord::Message, _ctx : Discord::Context)
