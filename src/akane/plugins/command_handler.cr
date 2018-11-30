@@ -50,17 +50,16 @@ module Akane
       macro method_added(method)
         \{% if ann = method.annotation(Command) %}
           Akane::Command.new(
-              name:         \{{ann[:name]}},
-              description:  \{{ann[:description]}},
-              usage:        \{{ann[:usage]}} || "",
-              hidden:       \{{ann[:hidden]}} || false
+              name:        \{{ann[:name]}},
+              description: \{{ann[:description]}},
+              usage:       \{{ann[:usage]}} || "",
+              hidden:      \{{ann[:hidden]}} || false
             ) do |client, payload, args|
 
             \{{method.name}}(client, payload, args)
           end
 
-          command = Akane::Command[\{{ann[:name]}}].as(Akane::Command)
-          command.subcommands << "--help"
+          .subcommands << "--help"
 
           Akane::Command.new(
               name: "#{\{{ann[:name]}}} --help",
@@ -73,11 +72,12 @@ module Akane
 
         \{% if ann = method.annotation(SubCommand) %}
           raise "Undefined command" unless command = Akane::Command[\{{ann[0]}}]
+
           command.subcommands << "#{\{{ann[1]}}} #{\{{ann[2]}}}"
 
           Akane::Command.new(
               name: "#{\{{ann[0]}}} #{\{{ann[1]}}}",
-              usage: \{{ann[2]}} || "",
+              usage: "#{\{{ann[2]}}}",
               hidden: true
             ) do |client, payload, args|
 
@@ -113,7 +113,8 @@ module Akane
     Limiter.new(:commands),
     Prefix.new,
     CommandParser.new(/^\w+(?:\s--\w+)?/),
-    ArgumentParser.new
+    ArgumentParser.new,
+    CommandLogger.new
   })]
   class CommandHandler
     include Discord::Plugin
@@ -123,7 +124,7 @@ module Akane
       command = ctx[CommandParser].command.as(Akane::Command)
       args = ctx[ArgumentParser].args.as(String)
 
-      case res = command.handle.call(client, payload, args.lstrip)
+      case res = command.handle.call(client, payload, args)
       when String
         client.create_message(payload.channel_id, res)
       when Discord::Embed

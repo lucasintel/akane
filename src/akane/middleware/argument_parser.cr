@@ -19,7 +19,7 @@ module Akane
       command = ctx[CommandParser].command.as(Akane::Command)
       message = ctx[CommandParser].message.as(String)
 
-      @args = message.sub(command.name, "")
+      @args = message.sub(command.name, "").lstrip
 
       args_size = @args.as(String).split.size
 
