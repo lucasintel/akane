@@ -14,6 +14,12 @@ module Discord
   end
 end
 
+class Myhtml::Iterator::Collection
+  def [](id)
+    Node.new(@tree, @list[id])
+  end
+end
+
 class String
   def code(lang = nil)
     "```#{lang}\n#{self}\n```"

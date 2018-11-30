@@ -35,8 +35,8 @@ module Akane
       if articles.size > 1
         links = String.build do |s|
           articles.each do |article|
-            link = article.css(".entry-title a").first.inner_text
-            url = article.css(".entry-title a").first.attribute_by("href")
+            link = article.css(".entry-title a")[0].inner_text
+            url = article.css(".entry-title a")[0].attribute_by("href")
 
             s << "- [" << link.gsub(" #boato", "") << "](" << url << ")\n"
           end
@@ -55,11 +55,11 @@ module Akane
         article = articles.first
 
         boato = Article.new(
-          title: article.css(".entry-title a").first.inner_text.gsub(" #boato", ""),
-          url: article.css(".entry-title a").first.attribute_by("href").as(String),
-          image: article.css(".featured-image img").first.try(&.attribute_by("src")),
-          description: article.css(".entry-content p").first.inner_text,
-          published_at: article.css(".entry-date").first.inner_text
+          title: article.css(".entry-title a")[0].inner_text.gsub(" #boato", ""),
+          url: article.css(".entry-title a")[0].attribute_by("href").as(String),
+          image: article.css(".featured-image img")[0].try(&.attribute_by("src")),
+          description: article.css(".entry-content p")[0].inner_text,
+          published_at: article.css(".entry-date")[0].inner_text
         )
 
         Discord::Embed.new(
