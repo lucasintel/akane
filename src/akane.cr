@@ -55,7 +55,7 @@ module Akane
   def self.handle_shards(rest_client, cache)
     loop {
       @@num_shards = rest_client.get_gateway_bot.shards
-      next unless @@num_shards != @@shards.size
+      next sleep(18000) unless @@num_shards != @@shards.size
 
       LOG.info("Resharding to #{@@num_shards}...")
 
@@ -67,8 +67,6 @@ module Akane
         @@shards << shard
         spawn { shard.run }
       end
-
-      sleep 18000
     }
   end
 
