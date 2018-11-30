@@ -41,6 +41,8 @@ module Akane
     def tag(client, payload, args)
       return "Tag not found." unless tag = Tag.find(payload.guild_id, args).first?
 
+      DB.insert_tag_use(payload.author.id, tag.id)
+
       if tag.attachment
         client.upload_file(payload.channel_id, tag.content, tag.file)
       else

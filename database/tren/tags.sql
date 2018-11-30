@@ -7,7 +7,15 @@ insert into tags (guild_id, user_id, name, content, attachment)
        {{name}},
        {{content}},
        {{attachment}}
-    );
+     );
+
+-- name: insert_tag_use(user_id : Discord::Snowflake, tag_id : Int32)
+
+insert into tag_uses (user_id, tag_id)
+     values (
+       {{user_id}},
+       {{tag_id}}
+     );
 
 -- name: delete_tag(guild_id : Discord::Snowflake, name : String)
 
