@@ -138,5 +138,19 @@ module Akane
         description: HumanizeTime.distance_of_time_in_words(START, Time.now)
       )
     end
+
+    REPO = "https://github.com/kandayo/akane"
+
+    @[Command(
+      name: "source",
+      description: "Command source code on github",
+      usage: "(command)",
+      hidden: true
+    )]
+    def source(client, payload, args)
+      return "Command not found" unless cmd = Akane::Command[args]
+
+      "#{REPO}/blob/master#{cmd.file.partition("akane")[2]}#L#{cmd.line}"
+    end
   end
 end

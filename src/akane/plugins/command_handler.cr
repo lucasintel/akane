@@ -7,6 +7,9 @@ module Akane
     getter args : Range(Int32, Int32)
     getter handle : Handle
 
+    getter line : Int32
+    getter file : String
+
     property subcommands = [] of String
 
     class_getter list = {} of String => Command
@@ -14,7 +17,16 @@ module Akane
     alias Return = Discord::Message | String | Discord::Embed | Nil
     alias Handle = Proc(Discord::Client, Discord::Message, String, Return)
 
-    def initialize(@name, @description = "", @usage = "", @hidden = false, &@handle : Handle)
+    def initialize(
+        @name,
+        @description = "",
+        @usage = "",
+        @hidden = false,
+        @line = __LINE__,
+        @file = __FILE__,
+        &@handle : Handle
+      )
+
       case @usage
       when .includes?("codeblock"),
            .includes?("...")
@@ -53,7 +65,9 @@ module Akane
               name:        \{{ann[:name]}},
               description: \{{ann[:description]}},
               usage:       \{{ann[:usage]}} || "",
-              hidden:      \{{ann[:hidden]}} || false
+              hidden:      \{{ann[:hidden]}} || false,
+              line: __LINE__,
+              file: __FILE__
             ) do |client, payload, args|
 
             \{{method.name}}(client, payload, args)
