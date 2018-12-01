@@ -7,6 +7,7 @@ module Akane
     @[Command(
       name: "dbl",
       description: "Display bot stats",
+      category: "Meta",
       usage: "(mention)",
       hidden: true
     )]

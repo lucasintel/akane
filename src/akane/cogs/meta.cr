@@ -9,6 +9,7 @@ module Akane
     @[Command(
       name: "ping",
       description: "Probably the most useless command",
+      category: "Meta",
       hidden: true
     )]
     def ping(client, payload, args)
@@ -21,19 +22,30 @@ module Akane
     @[Command(
       name: "help",
       description: "Probably the most useful command",
+      category: "Meta",
       hidden: true
     )]
     def help(client, payload, args)
       commands = Akane::Command.list.each_value.reject(&.hidden)
 
+      fields = [] of Discord::EmbedField
+
+      commands.group_by(&.category).each do |category, command|
+        fields << Discord::EmbedField.new(
+          name: category,
+          value: String.build do |s|
+            command.each do |cmd|
+              s << "**!a " << cmd.name << "** ~ " << cmd.description << "\n"
+            end
+          end
+        )
+      end
+
       Discord::Embed.new(
         title: "Commands",
+        description: "**PREFIX: !a<space>, ak<space>, @mention.**"
         colour: 6844039_u32,
-        description: String.build do |s|
-          commands.each do |cmd|
-            s << "**!a " << cmd.name << "** ~ " << cmd.description << "\n"
-          end
-        end,
+        fields: fields,
         footer: Discord::EmbedFooter.new(
           text: "For more info on a command, use \"!a (cmd) --help\"."
         )
@@ -85,7 +97,8 @@ module Akane
 
     @[Command(
       name: "info",
-      description: "Show stats about the bot"
+      description: "Show stats about the bot",
+      category: "Meta"
     )]
     def info(client, payload, args)
       cache = client.cache.as(Discord::Cache)
@@ -102,7 +115,7 @@ module Akane
     @[Command(
       name: "shard",
       description: "Show shards information",
-      hidden: true
+      category: "Meta"
     )]
     def shard_info(client, payload, args)
       table = TerminalTable.new
@@ -130,6 +143,7 @@ module Akane
     @[Command(
       name: "uptime",
       description: "Shows the bot's uptime",
+      category: "Meta",
       hidden: true
     )]
     def uptime(client, payload, args)
@@ -155,7 +169,8 @@ module Akane
 
     @[Command(
       name: "license",
-      description: "Shows the bot license",
+      description: "Shows the bot's license",
+      category: "Meta",
       hidden: true
     )]
     def license(client, payload, args)

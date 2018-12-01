@@ -28,6 +28,7 @@ module Akane
     @[Command(
       name: "man",
       description: "Simplified and community-driven man pages.",
+      category: "Programming",
       usage: "(name)"
     )]
     def man(client, payload, args)

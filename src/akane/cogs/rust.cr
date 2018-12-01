@@ -16,6 +16,7 @@ module Akane
     @[Command(
       name: "rustc",
       description: "Compile and execute rust code",
+      category: "Programming",
       usage: "(codeblock)"
     )]
     def rustc(client, payload, args)

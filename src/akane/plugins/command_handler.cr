@@ -2,6 +2,7 @@ module Akane
   class Command
     getter name : String
     getter description : String
+    getter category : String
     getter hidden : Bool
     getter usage : String
     getter args : Range(Int32, Int32)
@@ -20,6 +21,7 @@ module Akane
     def initialize(
         @name,
         @description = "",
+        @category = "Uncategorised",
         @usage = "",
         @hidden = false,
         @line = __LINE__,
@@ -63,6 +65,7 @@ module Akane
         \{% if ann = method.annotation(Command) %}
           Akane::Command.new(
               name:        \{{ann[:name]}},
+              category:    \{{ann[:category]}} || "Uncategorised",
               description: \{{ann[:description]}},
               usage:       \{{ann[:usage]}} || "",
               hidden:      \{{ann[:hidden]}} || false,
