@@ -45,7 +45,7 @@ module Akane
       when "c", "gcc"
         lang = {"gcc", "6.3.1"}
       when "ruby", "rb"
-        lang = {"ruby", "2.5.3"},
+        lang = {"ruby", "2.5.3"}
       when "crystal", "cr"
         lang = {"crystal", "0.27.0"}
       else
