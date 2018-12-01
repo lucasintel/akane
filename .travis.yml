@@ -1,3 +1,4 @@
 language: crystal
 script:
   - shards build
+  - bin/ameba
