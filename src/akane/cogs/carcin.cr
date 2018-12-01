@@ -34,20 +34,22 @@ module Akane
     end
 
     @[Command(
-      name: "eval",
+      name: "carcin",
       description: "Evaluates C, crystal and ruby code",
       usage: "(codeblock)"
     )]
     def eval(client, payload, args)
-      return unless md = payload.content.match(/```(?<language>\w+)\n(?<code>.*)```/m)
+      return "Invalid format." unless md = args.match(/```(?<language>\w+)\n(?<code>.*)```/m)
 
       case md["language"]
       when "c", "gcc"
         lang = {"gcc", "6.3.1"}
       when "ruby", "rb"
-        lang = {"ruby", "2.5.3"}
-      else
+        lang = {"ruby", "2.5.3"},
+      when "crystal", "cr"
         lang = {"crystal", "0.27.0"}
+      else
+        return "Unsupported language."
       end
 
       return "Request failed" unless res = run_request(lang, md["code"])
