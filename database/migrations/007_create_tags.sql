@@ -32,5 +32,6 @@ create table tag_uses (
 );
 
 -- +migrate down
+drop table tag_uses;
 drop table tags;
 drop function set_timestamp();
