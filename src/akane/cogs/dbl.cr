@@ -29,5 +29,10 @@ module Akane
         image: Discord::EmbedImage.new(url: "#{BASE}/#{id}.png")
       )
     end
+
+    @[SubCommand("dbl", "--vote")]
+    def vote(client, payload, args)
+      ":hearts: https://discordbots.org/bot/#{ENV["CLIENT_ID"]}/vote"
+    end
   end
 end
