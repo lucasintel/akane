@@ -43,7 +43,7 @@ module Akane
 
       Discord::Embed.new(
         title: "Commands",
-        description: "**PREFIX: !a<space>, ak<space>, @mention.**"
+        description: "**PREFIX: !a<space>, ak<space>, @mention.**",
         colour: 6844039_u32,
         fields: fields,
         footer: Discord::EmbedFooter.new(
