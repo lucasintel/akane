@@ -114,7 +114,7 @@ module Akane
 
     @[Command(
       name: "shard",
-      description: "Show shards information",
+      description: "Show shard information",
       category: "Meta"
     )]
     def shard_info(client, payload, args)
