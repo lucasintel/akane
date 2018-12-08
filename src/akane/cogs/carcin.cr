@@ -35,12 +35,13 @@ module Akane
 
     @[Command(
       name: "carcin",
-      description: "Compile and execute C, crystal and ruby code",
+      description: "Compile and execute C, crystal and ruby code.",
       category: "Programming",
-      usage: "(cr|rb|c codeblock)"
+      usage: "(codeblock)"
     )]
     def eval(client, payload, args)
-      return "Invalid format." unless md = args.match(/```(?<language>\w+)\n(?<code>.*)```/m)
+      return "Expecting C, crystal or ruby codeblock." \
+        unless md = args.match(/```(?<language>\w+)\n(?<code>.*)```/m)
 
       case md["language"]
       when "c", "gcc"

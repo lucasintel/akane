@@ -15,12 +15,12 @@ module Akane
 
     @[Command(
       name: "rustc",
-      description: "Compile and execute rust code",
+      description: "Compile and execute rust code.",
       category: "Programming",
       usage: "(codeblock)"
     )]
     def rustc(client, payload, args)
-      return "Invalid format." unless md = args.match(/```rust\n(?<code>.*)```/m)
+      return "Expecting rust codeblock." unless md = args.match(/```rust\n(?<code>.*)```/m)
 
       request = {
         channel: "stable",

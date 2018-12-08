@@ -7,12 +7,12 @@ module Akane
 
     @[Command(
       name: "coliru",
-      description: "Compile and execute C++ code",
+      description: "Compile and execute C++ code.",
       category: "Programming",
-      usage: "(cpp codeblock)"
+      usage: "(codeblock)"
     )]
     def coliru(client, payload, args)
-      return "Invalid format." unless md = args.match(/```cpp\n(?<code>.*)```/m)
+      return "Expecting cpp codeblock." unless md = args.match(/```cpp\n(?<code>.*)```/m)
 
       request = {
         cmd: "g++ -std=c++17 -O2 -Wall -pedantic -pthread main.cpp && ./a.out",
