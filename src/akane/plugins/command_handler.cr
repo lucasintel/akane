@@ -127,8 +127,8 @@ module Akane
 
   @[Discord::Plugin::Options(middleware: {
     IgnoreBots.new,
-    Limiter.new(:commands),
     Prefix.new,
+    Limiter.new(:commands),
     CommandParser.new(/^\w+(?:\s--[\w-]+)?/),
     ArgumentParser.new,
     CommandLogger.new
