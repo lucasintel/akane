@@ -129,7 +129,7 @@ module Akane
     IgnoreBots.new,
     Limiter.new(:commands),
     Prefix.new,
-    CommandParser.new(/^\w+(?:\s--\w+)?/),
+    CommandParser.new(/^\w+(?:\s--[\w-]+)?/),
     ArgumentParser.new,
     CommandLogger.new
   })]
